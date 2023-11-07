@@ -1,0 +1,62 @@
+Function find_max_profit_dp takes a list of prices:
+    # If there are no prices, we can't make a profit
+    If prices list is empty:
+        Return (0, 0, 0)
+
+    # Get the number of days for which we have prices
+    Set n to the length of prices
+    # If there is only one day's price, we can't make a profit because we can't sell
+    If n is less than 2:
+        Return (0, 0, 0)
+
+    # Initialize arrays to keep track of the maximum profit and the corresponding buy and sell days
+    Initialize dp array with length n filled with zeros
+    Initialize buy_day array with length n filled with zeros
+    Initialize sell_day array with length n filled with zeros
+
+    # There is no profit to be made on the first day as we can only buy
+    Set dp[0] to 0
+    # The minimum price and its day are initially set to the first day's price and day
+    Set min_price to prices[0]
+    Set min_price_day to 0
+
+    # Loop through each day to calculate the maximum profit
+    For i from 1 to n-1:
+        # If the current day's price is lower than the minimum price found so far, update the minimum price and its day
+        If prices[i] is less than min_price:
+            Set min_price to prices[i]
+            Set min_price_day to i
+
+        # Calculate potential profit if we sell on the current day
+        Calculate profit as prices[i] minus min_price
+
+        # If the potential profit is greater than the profit so far, update the dp array and the corresponding buy and sell days
+        If profit is greater than dp[i-1]:
+            Set dp[i] to profit
+            Set buy_day[i] to min_price_day
+            Set sell_day[i] to i
+        # Otherwise, we carry forward the profit and days from the previous day
+        Else:
+            Set dp[i] to dp[i-1]
+            Set buy_day[i] to buy_day[i-1]
+            Set sell_day[i] to sell_day[i-1]
+
+    # The last element in the dp array will contain the maximum profit. We return this along with the buy and sell days (+1 to adjust for 0-indexing)
+    Return dp[n-1], buy_day[n-1] + 1, sell_day[n-1] + 1
+
+# Given a matrix A of stock prices for various stocks
+Define a matrix A with lists of stock prices
+
+# Initialize variable to store the best stock index, buy day, sell day, and the max profit
+Initialize max_profit_info to (0, 0, 0, 0)
+
+# Loop through each stock's prices in the matrix
+For each index and prices list in matrix A:
+    # Find the max profit for the current list of prices using the DP function
+    Call find_max_profit_dp with prices
+    # If the calculated profit is greater than the max profit stored in max_profit_info, update it
+    If max_profit from find_max_profit_dp is greater than the fourth element in max_profit_info:
+        Update max_profit_info with index+1 (for 1-based indexing), buy_day, sell_day, and max_profit
+
+# Output the result with the best stock to buy, the day to buy, the day to sell, and the max profit
+Print "Stock to choose:", max_profit_info[0], "Buy on day:", max_profit_info[1], "Sell on day:", max_profit_info[2], "Max profit:", max_profit_info[3]
